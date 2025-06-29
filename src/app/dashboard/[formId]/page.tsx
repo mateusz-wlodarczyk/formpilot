@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTestSession } from "@/components/TestSessionProvider";
 import { FormBuilder } from "@/components/FormBuilder";
@@ -39,20 +39,14 @@ export default function FormEditPage() {
 
   const formId = params.formId as string;
 
-  useEffect(() => {
-    loadForm();
-  }, [formId, isTestMode]);
-
-  const loadForm = async () => {
+  const loadForm = useCallback(async () => {
     try {
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
       };
-
       if (isTestMode) {
         headers["x-test-user"] = "true";
       }
-
       const response = await fetch(`/api/forms/${formId}`, { headers });
       if (response.ok) {
         const formData = await response.json();
@@ -67,7 +61,11 @@ export default function FormEditPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [formId, isTestMode, router]);
+
+  useEffect(() => {
+    loadForm();
+  }, [loadForm]);
 
   const handleSave = async (data: {
     title: string;

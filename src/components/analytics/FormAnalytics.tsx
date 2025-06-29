@@ -192,7 +192,7 @@ export function FormAnalytics({
             <div className="text-center py-8 text-gray-500">
               <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
               <p className="mb-4">
-                This form hasn't received any responses yet.
+                This form hasn&apos;t received any responses yet.
               </p>
               <p className="text-sm">
                 Share the form to start collecting data and analyzing responses.

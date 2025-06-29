@@ -83,11 +83,13 @@ export default function HomePage() {
         {isTestMode && (
           <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
             <p className="text-sm text-green-800">
-              <strong>Demo Mode Active:</strong> You're using the test
+              <strong>Demo Mode Active:</strong> You&apos;re using the test
               environment with sample data.
             </p>
           </div>
         )}
+
+        <span className="text-blue-600 font-bold">It&apos;s free!</span>
       </div>
     </div>
   );

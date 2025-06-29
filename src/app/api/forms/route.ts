@@ -10,7 +10,7 @@ import {
 } from "@/lib/forms-logic";
 
 // Helper function to get user ID from session or test mode
-export async function getUserIdFromRequest(req: NextRequest) {
+async function getUserIdFromRequest(req: NextRequest) {
   const session = await getServerSession(authOptions);
 
   // If we have a real session, use that user

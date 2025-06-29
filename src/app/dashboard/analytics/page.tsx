@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTestSession } from "@/components/TestSessionProvider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,26 +43,19 @@ export default function AnalyticsPage() {
   const [allSubmissions, setAllSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadAnalyticsData();
-  }, [isTestMode]);
-
-  const loadAnalyticsData = async () => {
+  const loadAnalyticsData = useCallback(async () => {
     try {
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
       };
-
       if (isTestMode) {
         headers["x-test-user"] = "true";
       }
-
       // Load all forms
       const formsResponse = await fetch("/api/forms", { headers });
       if (formsResponse.ok) {
         const formsData = await formsResponse.json();
         setForms(formsData);
-
         // Load submissions for each form
         const allSubmissions: Submission[] = [];
         for (const form of formsData) {
@@ -81,7 +74,11 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isTestMode]);
+
+  useEffect(() => {
+    loadAnalyticsData();
+  }, [loadAnalyticsData]);
 
   const totalResponses = allSubmissions.length;
   const totalForms = forms.length;

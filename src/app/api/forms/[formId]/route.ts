@@ -6,7 +6,7 @@ import { TEST_USER_ID } from "@/lib/test-data";
 import { updateFormLogic } from "@/lib/forms-logic";
 
 // Helper function to get user ID from session or test mode
-export async function getUserIdFromRequest(req: NextRequest) {
+async function getUserIdFromRequest(req: NextRequest) {
   const session = await getServerSession(authOptions);
 
   if (session?.user?.email) {
