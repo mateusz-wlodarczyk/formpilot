@@ -1,97 +1,105 @@
-# FormPilot - SaaS do tworzenia formularzy i dashboard analityczny
+# FormPilot - SaaS for creating forms and analytics dashboard
 
-## Opis projektu
+## Project Description
 
-FormPilot to zaawansowana platforma SaaS umożliwiająca użytkownikom tworzenie własnych formularzy metodą drag-and-drop, udostępnianie ich publicznie lub przez iframe oraz analizowanie zebranych odpowiedzi w panelu administracyjnym z wykresami i eksportem danych.
+FormPilot is an advanced SaaS platform enabling users to create their own forms using drag-and-drop method, share them publicly or via iframe, and analyze collected responses in an administrative panel with charts and data export.
 
-Projekt zrealizowany jako pełny stack (Next.js + Prisma + PostgreSQL) z własnym backendem, autoryzacją i API.
+Project implemented as a full stack (Next.js + Prisma + PostgreSQL) with custom backend, authorization and API.
 
 ---
 
-## ROADMAPA PROJEKTU (MVP)
+## PROJECT ROADMAP (MVP)
 
-### ETAP 1: Przygotowanie środowiska
+### STAGE 1: Environment Setup
 
-Cel: uruchomić bazowy projekt z podstawowymi funkcjami logowania i struktury
+Goal: launch a base project with basic login and structure functions
 
-- Utwórz projekt Next.js (`app router`, TypeScript, Tailwind, ESLint)
-- Zainstaluj i skonfiguruj:
+- Create Next.js project (`app router`, TypeScript, Tailwind, ESLint)
+- Install and configure:
   - Prisma + PostgreSQL
   - Auth (NextAuth.js)
   - TailwindCSS + shadcn/ui
-- Utwórz layout dashboardu (sidebar + topbar)
-- Modele Prisma: `User`, `Form`, `Submission`
-- Własny backend w Next.js API Routes:
-  - `/api/forms` – tworzenie/edycja formularzy
-  - `/api/submissions` – zapis odpowiedzi
-  - `/api/user` – dane użytkownika (autoryzacja)
+- Create dashboard layout (sidebar + topbar)
+- Prisma models: `User`, `Form`, `Submission`
+- Custom backend in Next.js API Routes:
+  - `/api/forms` – create/edit forms
+  - `/api/submissions` – save responses
+  - `/api/user` – user data (authorization)
 
 ---
 
-### ETAP 2: Tworzenie i edycja formularzy
+### STAGE 2: Form creation and editing
 
-Cel: użytkownik może zbudować i edytować formularz
+Goal: user can build and edit a form
 
-- UI do tworzenia formularza (nazwa, opis, tagi)
-- Dodawanie pól (input, textarea, select, checkbox, etc.)
-- Zapisywanie formularza do bazy (ze strukturą JSON pól)
-- Widok listy formularzy z przyciskiem "Edytuj"
-- Komponent `FormBuilder` (React Hook Form + Zod)
-
----
-
-### ETAP 3: Publiczny formularz i submissiony
-
-Cel: formularz można udostępnić i wypełnić
-
-- Publiczny URL formularza (`/form/[formId]`)
-- Renderowanie formularza dynamicznie na podstawie JSON ze struktury
-- Walidacja danych i zapis submissiona do bazy danych przez API
-- Komponent `EmbedCode` (iframe/skrypt do wklejenia na inne strony)
+- UI for form creation (name, description, tags)
+- Adding fields (input, textarea, select, checkbox, etc.)
+- Saving form to database (with JSON structure of fields)
+- Form list view with "Edit" button
+- `FormBuilder` component (React Hook Form + Zod)
 
 ---
 
-### ETAP 4: Dashboard + analityka
+### STAGE 3: Public form and submissions
 
-Cel: użytkownik widzi dane w czytelnej i atrakcyjnej formie
+Goal: form can be shared and filled out
 
-- Widok submissionów (tabela z sortowaniem i filtrowaniem)
-- Export do CSV (np. za pomocą `papaparse`)
-- Wykresy (np. `Recharts`, `Tremor`)
-  - Liczba odpowiedzi w czasie
-  - Rozkład odpowiedzi (dla selectów, checkboxów)
-- Prosty plan subskrypcyjny (Stripe – free do 5 formularzy)
+- Public form URL (`/form/[formId]`)
+- Dynamic form rendering based on JSON structure
+- Data validation and submission save to database via API
+- `EmbedCode` component (iframe/script to embed on other pages)
 
 ---
 
-## STRUKTURA PROJEKTU (bazowa)
+### STAGE 4: Dashboard + analytics
+
+Goal: user sees data in a readable and attractive form
+
+- Submissions view (table with sorting and filtering)
+- Export to CSV (e.g., using `papaparse`)
+- Charts (e.g., `Recharts`, `Tremor`)
+  - Number of responses over time
+  - Response distribution (for selects, checkboxes)
+
+### STAGE 5: test account
+
+- create test account, login as test and bypass authorization, blocked e.g. in .env
+- create 59 random forms and responses, so there's something to show in the dashboard
+
+### STAGE 6: final checking
+
+- check the entire application and tests
+
+---
+
+## PROJECT STRUCTURE (base)
 
 ```
 /app
   ├─ dashboard/
-  │   ├─ page.tsx           # Lista formularzy
-  │   └─ [formId]/          # Widok 1 formularza + odpowiedzi
-  │       ├─ builder.tsx    # Kreator formularzy
-  │       └─ responses.tsx  # Analityka / odpowiedzi
+  │   ├─ page.tsx           # Form list
+  │   └─ [formId]/          # Single form view + responses
+  │       ├─ builder.tsx    # Form creator
+  │       └─ responses.tsx  # Analytics / responses
   ├─ form/
-  │   └─ [formId]/page.tsx  # Publiczny formularz
+  │   └─ [formId]/page.tsx  # Public form
   ├─ api/
-  │   ├─ forms/             # CRUD formularzy
-  │   └─ submissions/       # Zapisywanie odpowiedzi
-  └─ middleware.ts          # Autoryzacja API
+  │   ├─ forms/             # CRUD forms
+  │   └─ submissions/       # Save responses
+  └─ middleware.ts          # API authorization
 /lib
-  └─ validators.ts          # Zod schematy
+  └─ validators.ts          # Zod schemas
 /components
-  ├─ ui/                    # Komponenty UI (Button, Input, itd.)
+  ├─ ui/                    # UI components (Button, Input, etc.)
   ├─ builder/               # FormBuilder, FieldEditor
-  └─ analytics/             # Wykresy, statystyki
+  └─ analytics/             # Charts, statistics
 /prisma
   └─ schema.prisma
 ```
 
 ---
 
-## Modele Prisma (MVP)
+## Prisma Models (MVP)
 
 ```prisma
 model User {
@@ -106,7 +114,7 @@ model Form {
   userId      String
   title       String
   description String?
-  fields      Json         // Dynamiczne pola formularza
+  fields      Json         // Dynamic form fields
   submissions Submission[]
   createdAt   DateTime     @default(now())
   user        User         @relation(fields: [userId], references: [id])
@@ -115,7 +123,7 @@ model Form {
 model Submission {
   id        String   @id @default(cuid())
   formId    String
-  data      Json     // Odpowiedzi na formularz
+  data      Json     // Form responses
   createdAt DateTime @default(now())
   form      Form     @relation(fields: [formId], references: [id])
 }
@@ -125,26 +133,26 @@ model Submission {
 
 ## Backend API – Next.js App Router (Fullstack)
 
-Przykładowe endpointy:
+Example endpoints:
 
-- `POST /api/forms` – utwórz nowy formularz
-- `GET /api/forms/:id` – pobierz formularz
-- `PUT /api/forms/:id` – edytuj formularz
-- `POST /api/submissions` – zapisz odpowiedź
-- `GET /api/user` – pobierz dane aktualnego użytkownika
+- `POST /api/forms` – create new form
+- `GET /api/forms/:id` – get form
+- `PUT /api/forms/:id` – edit form
+- `POST /api/submissions` – save response
+- `GET /api/user` – get current user data
 
-Autoryzacja za pomocą NextAuth (JWT + middleware API).
+Authorization using NextAuth (JWT + API middleware).
 
 ---
 
-## Plan działania
+## Action Plan
 
-1. Starter project na GitHubie (Next.js + Tailwind + Prisma + Auth)
-2. Implementacja API i modeli Prisma
-3. Tworzenie dashboardu i formularzy
-4. Wizualizacje i eksport danych
+1. Starter project on GitHub (Next.js + Tailwind + Prisma + Auth)
+2. API and Prisma models implementation
+3. Dashboard and forms creation
+4. Visualizations and data export
 5. Deployment: Vercel + Railway (PostgreSQL)
 
 ---
 
-# Powodzenia i działaj dalej! 🚀
+# Good luck and keep going! 🚀

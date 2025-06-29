@@ -15,10 +15,10 @@ export default async function SignInPage() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Zaloguj się do FormPilot
+            Sign in to FormPilot
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Platforma do tworzenia formularzy i analityki
+            Platform for creating forms and analytics
           </p>
         </div>
         <div className="mt-8 space-y-6">

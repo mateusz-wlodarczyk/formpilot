@@ -19,7 +19,7 @@ export default function FormsList() {
 
   return (
     <div>
-      <h1>Lista formularzy</h1>
+      <h1>Forms List</h1>
       <ul>
         {forms.map((form) => (
           <li key={form.id}>
@@ -28,7 +28,7 @@ export default function FormsList() {
               href={`/dashboard/forms/${form.id}/edit`}
               className="text-blue-500"
             >
-              Edytuj
+              Edit
             </a>
           </li>
         ))}

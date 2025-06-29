@@ -3,21 +3,22 @@ import { prisma } from "@/lib/prisma/prisma";
 
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
+    const { formId, data } = await req.json();
 
-    // Sprawdź czy formularz istnieje
+    // Check if the form exists
     const form = await prisma.form.findUnique({
-      where: { id: data.formId },
+      where: { id: formId },
     });
 
     if (!form) {
       return NextResponse.json({ error: "Form not found" }, { status: 404 });
     }
 
+    // Zapisz submission
     const submission = await prisma.submission.create({
       data: {
-        formId: data.formId,
-        data: data.data || {},
+        formId,
+        data,
       },
     });
 
@@ -38,22 +39,20 @@ export async function GET(req: NextRequest) {
 
     if (!formId) {
       return NextResponse.json(
-        { error: "Form ID is required" },
+        { error: "formId parameter is required" },
         { status: 400 }
       );
     }
 
+    const page = Number(searchParams.get("page") || 0);
+    const pageSize = Number(searchParams.get("pageSize") || 20);
+
     const submissions = await prisma.submission.findMany({
       where: { formId },
+      select: { id: true, data: true, createdAt: true },
       orderBy: { createdAt: "desc" },
-      include: {
-        form: {
-          select: {
-            title: true,
-            userId: true,
-          },
-        },
-      },
+      skip: page * pageSize,
+      take: pageSize,
     });
 
     return NextResponse.json(submissions);
