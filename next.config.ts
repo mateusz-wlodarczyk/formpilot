@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  output: "standalone",
-  serverExternalPackages: ["@prisma/client"],
+  // Only custom webpack config remains
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {
       // Suppress WebSocket connection errors in development
@@ -11,12 +9,10 @@ const nextConfig: NextConfig = {
         level: "error",
       };
     }
-
     // Handle Prisma client in webpack
     if (isServer) {
       config.externals = [...(config.externals || []), "@prisma/client"];
     }
-
     return config;
   },
 };
